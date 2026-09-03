@@ -1,18 +1,8 @@
-# Course and Enrollment – SQL JOIN Exercise
+# RDBMS Program 10 - LEFT JOIN and RIGHT JOIN
 
 ## Objective
 
-Create and use two SQL tables:
-
-* `Course`
-* `Enrollment`
-
-Then perform:
-
-1. LEFT JOIN
-2. RIGHT JOIN
-
-using `CourseID`.
+Create `Course` and `Enrollment` tables, insert the given records, and perform LEFT JOIN and RIGHT JOIN operations.
 
 ## Course Table
 
@@ -31,88 +21,59 @@ using `CourseID`.
 |            3 |      1002 |      203 |
 |            4 |      1003 |      201 |
 
-## Student Instructions
+## Student Task
 
-### Step 1
+Students must:
 
-Open `starter.sql`.
+1. Create the `CollegeDB` database.
+2. Create the `Course` table.
+3. Insert the three Course records.
+4. Create the `Enrollment` table.
+5. Insert the four Enrollment records.
+6. Perform a **LEFT JOIN** between `Course` and `Enrollment`.
+7. Perform a **RIGHT JOIN** between `Course` and `Enrollment`.
+8. Display Course and Enrollment details.
 
-The tables and sample data are already provided.
+## LEFT JOIN
 
-### Step 2
-
-Write a **LEFT JOIN** between `Course` and `Enrollment`.
-
-The JOIN condition should be:
-
-```sql
-Course.CourseID = Enrollment.CourseID
-```
-
-The LEFT JOIN must include every record from the `Course` table.
-
-### Step 3
-
-Write a **RIGHT JOIN** between `Course` and `Enrollment`.
-
-The RIGHT JOIN must include every record from the `Enrollment` table.
-
-### Expected LEFT JOIN Output
-
-```text
-201 | Database Systems | 4 | 1 | 1001
-201 | Database Systems | 4 | 4 | 1003
-202 | Data Structures  | 3 | 2 | 1001
-203 | Mathematics      | 4 | 3 | 1002
-```
-
-### Expected RIGHT JOIN Output
-
-```text
-201 | Database Systems | 4 | 1 | 1001
-201 | Database Systems | 4 | 4 | 1003
-202 | Data Structures  | 3 | 2 | 1001
-203 | Mathematics      | 4 | 3 | 1002
-```
-
-## Running Locally
-
-Install SQLite and run:
-
-```bash
-sqlite3 database.db
-```
-
-Then:
+The LEFT JOIN should use:
 
 ```sql
-.read starter.sql
+SELECT Course.CourseID,
+       Course.CourseName,
+       Enrollment.EnrollmentID,
+       Enrollment.StudentID
+FROM Course
+LEFT JOIN Enrollment
+ON Course.CourseID = Enrollment.CourseID;
 ```
 
-To run the tests:
+Expected number of rows: **4**
 
-```bash
-sqlite3 database.db < test.sql
+## RIGHT JOIN
+
+The RIGHT JOIN should use:
+
+```sql
+SELECT Course.CourseID,
+       Course.CourseName,
+       Enrollment.EnrollmentID,
+       Enrollment.StudentID
+FROM Course
+RIGHT JOIN Enrollment
+ON Course.CourseID = Enrollment.CourseID;
 ```
 
-## GitHub
+Expected number of rows: **4**
 
-Push your changes to GitHub.
+## Submission Instructions
 
-GitHub Actions will automatically execute the tests.
+* Complete `student_solution.sql`.
+* Do not modify `test.sh`.
+* Do not modify `.github/workflows/autograding.yml`.
+* Commit and push your changes to GitHub.
+* Open the **Actions** tab to check the autograding result.
 
-A green check mark means the tests passed.
+## Total Marks
 
-A red cross means one or more tests failed.
-
-## Learning Outcome
-
-After completing this exercise, students should be able to:
-
-* Create SQL tables.
-* Insert records.
-* Understand primary keys.
-* Understand foreign-key relationships.
-* Perform LEFT JOIN.
-* Perform RIGHT JOIN.
-* Use `ON` conditions in JOIN operations.
+**10 Marks**
