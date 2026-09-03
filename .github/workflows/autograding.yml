@@ -1,0 +1,82 @@
+name: SQL Autograding
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-sql:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install SQLite
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sqlite3
+
+      - name: Create Database
+        run: |
+          sqlite3 database.db < starter.sql
+
+      - name: Check Tables
+        run: |
+          echo "Checking Course and Enrollment tables..."
+          sqlite3 database.db "SELECT COUNT(*) FROM Course;"
+          sqlite3 database.db "SELECT COUNT(*) FROM Enrollment;"
+
+      - name: Run Tests
+        run: |
+          sqlite3 database.db < test.sql > test_output.txt
+          cat test_output.txt
+
+      - name: Verify Tests
+        run: |
+          if grep -q "FAIL" test_output.txt; then
+            echo "❌ Some tests failed."
+            exit 1
+          else
+            echo "✅ All tests passed."
+          fi
+
+      - name: Test LEFT JOIN
+        run: |
+          RESULT=$(sqlite3 database.db "
+          SELECT COUNT(*)
+          FROM Course c
+          LEFT JOIN Enrollment e
+          ON c.CourseID = e.CourseID;
+          ")
+
+          if [ "$RESULT" -eq 4 ]; then
+            echo "✅ LEFT JOIN passed"
+          else
+            echo "❌ LEFT JOIN failed"
+            exit 1
+          fi
+
+      - name: Test RIGHT JOIN
+        run: |
+          RESULT=$(sqlite3 database.db "
+          SELECT COUNT(*)
+          FROM Course c
+          RIGHT JOIN Enrollment e
+          ON c.CourseID = e.CourseID;
+          ")
+
+          if [ "$RESULT" -eq 4 ]; then
+            echo "✅ RIGHT JOIN passed"
+          else
+            echo "❌ RIGHT JOIN failed"
+            exit 1
+          fi
+
+      - name: Final Result
+        run: |
+          echo "===================================="
+          echo "🎉 ALL TESTS PASSED SUCCESSFULLY!"
+          echo "===================================="
